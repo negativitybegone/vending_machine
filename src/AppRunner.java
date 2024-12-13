@@ -11,7 +11,7 @@ public class AppRunner {
 
 //    private final CoinAcceptor coinAcceptor;
 //    private final CashAcceptor cashAcceptor;
-private PaymentAcceptor paymentAcceptor;
+    private PaymentAcceptor paymentAcceptor;
 
 
     private static boolean isExit = false;
@@ -25,10 +25,26 @@ private PaymentAcceptor paymentAcceptor;
                 new Mars(ActionLetter.F, 80),
                 new Pistachios(ActionLetter.G, 130)
         });
-        this.paymentAcceptor = new CoinAcceptor(0);
+        paymentAcceptor = new CoinAcceptor(0);
     }
 
     public static void run() {
+        System.out.println("Выберите способ оплаты:");
+        System.out.println("1 - Монеты");
+        System.out.println("2 - Купюры");
+
+        Scanner scanner = new Scanner(System.in);
+        int choice = scanner.nextInt();
+
+        PaymentAcceptor paymentAcceptor;
+        if (choice == 1) {
+            paymentAcceptor = new CoinAcceptor(0);
+        } else if (choice == 2) {
+            paymentAcceptor = new CashAcceptor(0);
+        } else {
+            System.out.println("Неверный выбор. Запуск с монетоприемником по умолчанию.");
+            paymentAcceptor = new CoinAcceptor(0);
+        }
         AppRunner app = new AppRunner();
         while (!isExit) {
             app.startSimulation();
@@ -39,7 +55,7 @@ private PaymentAcceptor paymentAcceptor;
         print("В автомате доступны:");
         showProducts(products);
 
-        print("Монет на сумму: " + paymentAcceptor.getAmount());
+        print("Средств на сумму: " + paymentAcceptor.getAmount());
 
         UniversalArray<Product> allowProducts = new UniversalArrayImpl<>();
         allowProducts.addAll(getAllowedProducts().toArray());
@@ -63,22 +79,7 @@ private PaymentAcceptor paymentAcceptor;
         print(" h - Выйти");
         String action = fromConsole().substring(0, 1);
         if ("a".equalsIgnoreCase(action)) {
-            System.out.println("Выберите способ оплаты:");
-            System.out.println("1 - Монеты");
-            System.out.println("2 - Купюры");
-            Scanner scanner = new Scanner(System.in);
-            int choice = scanner.nextInt();
-
-            PaymentAcceptor paymentAcceptor;
-            if (choice == 1) {
-                paymentAcceptor = new CoinAcceptor(0);
-            } else if (choice == 2) {
-                paymentAcceptor = new CashAcceptor(0);
-            } else {
-                System.out.println("Неверный выбор. Запуск с монетоприемником по умолчанию.");
-                paymentAcceptor = new CoinAcceptor(0);
-            }
-            paymentAcceptor.addMoney(paymentAcceptor.getAmount() + 10);
+            paymentAcceptor.addMoney( 10);
             print("Вы пополнили баланс на 10");
             return;
         }
@@ -121,5 +122,7 @@ private PaymentAcceptor paymentAcceptor;
     private void print(String msg) {
         System.out.println(msg);
     }
+
+
 }
 
