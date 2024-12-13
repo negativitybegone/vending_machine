@@ -14,3 +14,6 @@ git push command for check
 git add CashAcceptor class
 git commit Added new  class CashAcceptor and edited PaymentAcceptor.java, AppRunner.jav
 git commit commands.txt
+git commit fixed payment method choice
+git push
+git commit added new method and push

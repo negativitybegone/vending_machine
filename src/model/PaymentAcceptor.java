@@ -1,15 +1,12 @@
 package model;
 
-public abstract class PaymentAcceptor {
-    protected int amount;
+public  interface PaymentAcceptor {
+    int getAmount();
 
-    public PaymentAcceptor(int amount) {
-        this.amount = amount;
-    }
+    void addMoney(int amount);
 
-    public int getAmount() {
-        return amount;
-    }
+    void substractMoney(int amount);
 
-    public abstract void handlePaymentInput();
+    void handlePaymentInput();
 }
+

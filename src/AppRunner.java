@@ -8,15 +8,10 @@ import java.util.Scanner;
 public class AppRunner {
 
     private final UniversalArray<Product> products = new UniversalArrayImpl<>();
-
-//    private final CoinAcceptor coinAcceptor;
-//    private final CashAcceptor cashAcceptor;
-    private PaymentAcceptor paymentAcceptor;
-
-
+    private final PaymentAcceptor paymentAcceptor;
     private static boolean isExit = false;
 
-    private AppRunner() {
+    private AppRunner(PaymentAcceptor paymentAcceptor) {
         products.addAll(new Product[]{
                 new Water(ActionLetter.B, 20),
                 new CocaCola(ActionLetter.C, 50),
@@ -25,7 +20,7 @@ public class AppRunner {
                 new Mars(ActionLetter.F, 80),
                 new Pistachios(ActionLetter.G, 130)
         });
-        paymentAcceptor = new CoinAcceptor(0);
+        this.paymentAcceptor = paymentAcceptor;
     }
 
     public static void run() {
@@ -45,7 +40,7 @@ public class AppRunner {
             System.out.println("Неверный выбор. Запуск с монетоприемником по умолчанию.");
             paymentAcceptor = new CoinAcceptor(0);
         }
-        AppRunner app = new AppRunner();
+        AppRunner app = new AppRunner(paymentAcceptor);
         while (!isExit) {
             app.startSimulation();
         }
@@ -79,8 +74,7 @@ public class AppRunner {
         print(" h - Выйти");
         String action = fromConsole().substring(0, 1);
         if ("a".equalsIgnoreCase(action)) {
-            paymentAcceptor.addMoney( 10);
-            print("Вы пополнили баланс на 10");
+            paymentAcceptor.handlePaymentInput();
             return;
         }
         try {
