@@ -1,0 +1,16 @@
+$ git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+
+$ git branch home_work_25
+
+$ git checkout home_work_25
+Switched to branch 'home_work_25'
+
+$ git commit -m"added new abstract class PaymentAccepter and made respective changes to CoinAccepter class"
+git push command for check
+git add CashAcceptor class
+git commit Added new  class CashAcceptor and edited PaymentAcceptor.java, AppRunner.jav
+git commit commands.txt
