@@ -9,7 +9,10 @@ public class AppRunner {
 
     private final UniversalArray<Product> products = new UniversalArrayImpl<>();
 
-    private final CoinAcceptor coinAcceptor;
+//    private final CoinAcceptor coinAcceptor;
+//    private final CashAcceptor cashAcceptor;
+private PaymentAcceptor paymentAcceptor;
+
 
     private static boolean isExit = false;
 
@@ -22,7 +25,7 @@ public class AppRunner {
                 new Mars(ActionLetter.F, 80),
                 new Pistachios(ActionLetter.G, 130)
         });
-        coinAcceptor = new CoinAcceptor(100);
+        this.paymentAcceptor = new CoinAcceptor(0);
     }
 
     public static void run() {
@@ -36,7 +39,7 @@ public class AppRunner {
         print("В автомате доступны:");
         showProducts(products);
 
-        print("Монет на сумму: " + coinAcceptor.getAmount());
+        print("Монет на сумму: " + paymentAcceptor.getAmount());
 
         UniversalArray<Product> allowProducts = new UniversalArrayImpl<>();
         allowProducts.addAll(getAllowedProducts().toArray());
@@ -47,7 +50,7 @@ public class AppRunner {
     private UniversalArray<Product> getAllowedProducts() {
         UniversalArray<Product> allowProducts = new UniversalArrayImpl<>();
         for (int i = 0; i < products.size(); i++) {
-            if (coinAcceptor.getAmount() >= products.get(i).getPrice()) {
+            if (paymentAcceptor.getAmount() >= products.get(i).getPrice()) {
                 allowProducts.add(products.get(i));
             }
         }
@@ -60,14 +63,29 @@ public class AppRunner {
         print(" h - Выйти");
         String action = fromConsole().substring(0, 1);
         if ("a".equalsIgnoreCase(action)) {
-            coinAcceptor.setAmount(coinAcceptor.getAmount() + 10);
+            System.out.println("Выберите способ оплаты:");
+            System.out.println("1 - Монеты");
+            System.out.println("2 - Купюры");
+            Scanner scanner = new Scanner(System.in);
+            int choice = scanner.nextInt();
+
+            PaymentAcceptor paymentAcceptor;
+            if (choice == 1) {
+                paymentAcceptor = new CoinAcceptor(0);
+            } else if (choice == 2) {
+                paymentAcceptor = new CashAcceptor(0);
+            } else {
+                System.out.println("Неверный выбор. Запуск с монетоприемником по умолчанию.");
+                paymentAcceptor = new CoinAcceptor(0);
+            }
+            paymentAcceptor.addMoney(paymentAcceptor.getAmount() + 10);
             print("Вы пополнили баланс на 10");
             return;
         }
         try {
             for (int i = 0; i < products.size(); i++) {
                 if (products.get(i).getActionLetter().equals(ActionLetter.valueOf(action.toUpperCase()))) {
-                    coinAcceptor.setAmount(coinAcceptor.getAmount() - products.get(i).getPrice());
+                    paymentAcceptor.substractMoney(products.get(i).getPrice());
                     print("Вы купили " + products.get(i).getName());
                     break;
                 }
@@ -104,3 +122,4 @@ public class AppRunner {
         System.out.println(msg);
     }
 }
+
